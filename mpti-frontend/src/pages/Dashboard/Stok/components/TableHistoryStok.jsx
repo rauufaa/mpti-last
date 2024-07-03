@@ -14,12 +14,12 @@ function TableHistoryStok() {
 
     const handleStartDateInputChange = (event) => {
         dispatch(updateStartDateStok(event.target.value))
-        
+
     }
 
     const handleEndDateInputChange = (event) => {
         dispatch(updateEndDateStok(event.target.value))
-        
+
     }
 
     const handleSubmitSearchHistory = (event) => {
@@ -30,7 +30,7 @@ function TableHistoryStok() {
             startDate: stokState.historyData?.startDate,
             endDate: stokState.historyData?.endDate
         }
-        
+
         dispatch(historyStok(dataPrep))
     }
 
@@ -55,17 +55,28 @@ function TableHistoryStok() {
         }
         dispatch(historyStok(dataPrep))
     }
-    
+
 
     useEffect(() => {
-        const dataPrep = {
-            token: userState.data.token,
-            currentPage: stokState.historyData?.currentPage,
-            startDate: stokState.historyData?.startDate,
-            endDate: stokState.historyData?.endDate
-        }
-        dispatch(historyStok(dataPrep))
-        
+        fetch('https://worldtimeapi.org/api/timezone/Asia/Jakarta')
+            .then(response => response.json())
+            .then(data => {
+
+                dispatch(updateStartDateStok(data.datetime.slice(0, 11) + "00:00"))
+                dispatch(updateEndDateStok(data.datetime.slice(0, 11) + "23:59"))
+                const dataPrep = {
+                    token: userState.data.token,
+                    currentPage: stokState.historyData?.currentPage,
+                    startDate: data.datetime.slice(0, 11) + "00:00",
+                    endDate: data.datetime.slice(0, 11) + "23:59"
+                }
+                dispatch(historyStok(dataPrep)).then(result=>
+                    console.log(result)
+                )
+            })
+            .catch(error => {
+
+            });
     }, [])
 
 
@@ -75,7 +86,7 @@ function TableHistoryStok() {
             startDate: stokState.historyData.startDate,
             endDate: stokState.historyData.endDate
         }
-        
+
         dispatch(downloadHistoryStok(dataPrep)).then(result => {
             if (!result.error) {
                 excelExport(result.payload)
@@ -96,9 +107,9 @@ function TableHistoryStok() {
         const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
         const fileExtension = ".xlsx";
         const Heading = [
-            ['No', 'Penginput', 'Jenis Gas', 'Jumlah', 'Sisa','Tanggal', 'Informasi']
+            ['No', 'Penginput', 'Jenis Gas', 'Jumlah', 'Sisa', 'Tanggal', 'Informasi']
         ];
-        const ws = XLSX.utils.json_to_sheet(result.data.map((data, index)=>[index+1, data.nama_penginput, data.nama_gas, data.jumlah, data.sisa, data.tanggal, data.informasi]), { origin: 'A2'});
+        const ws = XLSX.utils.json_to_sheet(result.data.map((data, index) => [index + 1, data.nama_penginput, data.nama_gas, data.jumlah, data.sisa, data.tanggal, data.informasi]), { origin: 'A2' });
         XLSX.utils.sheet_add_aoa(ws, Heading, { origin: 'A2' });
         const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
         const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
@@ -113,12 +124,12 @@ function TableHistoryStok() {
 
                         <div className="flex md:flex-row flex-col gap-4">
                             <div className="w-full">
-                                
+
                                 <input defaultValue={stokState.historyData?.startDate} onChange={handleStartDateInputChange} type="datetime-local" className="input input-bordered w-full" />
                             </div>
                             <h2 className="card-title justify-center">Sampai</h2>
                             <div className="w-full">
-                                
+
                                 <input defaultValue={stokState.historyData?.endDate} onChange={handleEndDateInputChange} type="datetime-local" className="input input-bordered w-full" />
                             </div>
                         </div>
@@ -156,7 +167,7 @@ function TableHistoryStok() {
                                 <tbody className={stokState.loading ? "skeleton" : ""}>
 
                                     {
-                                        stokState.historyData.list?.length==0 ? (
+                                        stokState.historyData.list?.length == 0 ? (
                                             <tr><td colSpan={6} className="text-center">Tidak Ada Data</td></tr>
                                         ) : (
                                             stokState.historyData.list?.map((data, index) => {

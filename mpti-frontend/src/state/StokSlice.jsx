@@ -44,7 +44,7 @@ export const updatePriceStok = createAsyncThunk(
             priceSell: data.priceSell
         })
         try {
-            const response = await axios.post("/gas/update", prepData, {
+            const response = await axiosInstance.post("/gas/update", prepData, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': data.token
@@ -69,7 +69,7 @@ export const historyStok = createAsyncThunk(
     async (data, thunkAPI) => {
 
         try {
-            const response = await axios.get("/gas/send", {
+            const response = await axiosInstance.get("/gas/send", {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': data.token
@@ -82,7 +82,7 @@ export const historyStok = createAsyncThunk(
                 }
             });
             const result = await response.data;
-
+            console.log(result)
             return result;
         } catch (error) {
 

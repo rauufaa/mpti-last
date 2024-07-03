@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 23, 2024 at 05:27 PM
+-- Generation Time: Jul 03, 2024 at 03:09 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,8 +40,7 @@ CREATE TABLE `detail_pembelian` (
 --
 
 INSERT INTO `detail_pembelian` (`id`, `id_pembelian`, `jumlah`, `id_detail_pengiriman`, `id_gas`) VALUES
-(1, 1, 1, NULL, 1),
-(2, 2, 0, 8, 1);
+(12, 12, 1, 9, 20);
 
 -- --------------------------------------------------------
 
@@ -64,7 +63,7 @@ CREATE TABLE `detail_pengiriman` (
 
 INSERT INTO `detail_pengiriman` (`id`, `nama_gas`, `id_pengiriman`, `jumlah`, `sisa`, `retur`) VALUES
 (2, 'LPG3KG', 3, 100, 0, 0),
-(8, 'LPG3KG', 9, 100, 88, 89);
+(9, 'LPG3KG', 10, 100, 99, 0);
 
 -- --------------------------------------------------------
 
@@ -104,7 +103,8 @@ INSERT INTO `gas` (`id`, `nama`, `harga_beli`, `harga_jual`, `tanggal`) VALUES
 (17, 'LPG3KG', 17000, 18000, '2024-06-23 15:15:00'),
 (18, 'LPG3KG', 17000, 18002, '2024-06-23 15:16:00'),
 (19, 'LPG3KG', 17000, 12000, '2024-06-23 15:16:00'),
-(20, 'LPG3KG', 17000, 20000, '2024-06-23 17:50:00');
+(20, 'LPG3KG', 17000, 20000, '2024-06-23 17:50:00'),
+(21, 'LPG3KG', 17000, 20000, '2024-06-25 19:41:00');
 
 -- --------------------------------------------------------
 
@@ -117,16 +117,24 @@ CREATE TABLE `konsumen` (
   `nik` varchar(20) NOT NULL,
   `nama` varchar(100) NOT NULL,
   `alamat` varchar(255) NOT NULL,
-  `tipe` set('RUMAH_TANGGA','USAHA') NOT NULL
+  `tipe` set('RUMAH_TANGGA','USAHA') NOT NULL,
+  `ktp_name` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `konsumen`
 --
 
-INSERT INTO `konsumen` (`id`, `nik`, `nama`, `alamat`, `tipe`) VALUES
-(1, '1810021306030001', 'Wali', 'Amerika', 'RUMAH_TANGGA'),
-(2, '1810021306030002', 'Jeto', 'Wetan', 'USAHA');
+INSERT INTO `konsumen` (`id`, `nik`, `nama`, `alamat`, `tipe`, `ktp_name`) VALUES
+(1, '1810021306030001', 'Wali', 'Amerika', 'RUMAH_TANGGA', NULL),
+(2, '1810021306030002', 'Jeto', 'Wetan', 'USAHA', NULL),
+(3, '1810021306030004', 'Joni', 'Wetan', 'RUMAH_TANGGA', NULL),
+(4, '1810021306030007', 'Wahyu', 'Wenida', 'RUMAH_TANGGA', 'png.jpg'),
+(5, '1810021306030020', 'qasdadasd', 'dvasvasdv', 'RUMAH_TANGGA', '40002296efd706ea221605e0ff8090f2.png'),
+(6, '1810021306030021', 'qasdadasd', 'dvasvasdv', 'RUMAH_TANGGA', '40002296efd706ea221605e0ff8090f2.png'),
+(7, '1810021306030022', 'qasdadasd', 'dvasvasdv', 'RUMAH_TANGGA', 'bcb0a08e3c7f375c73332b660947c596.png'),
+(8, '1810021306030099', 'Oji', 'sdfasfsadfa', 'RUMAH_TANGGA', '40002296efd706ea221605e0ff8090f2.png'),
+(9, '1810021306030077', 'sadada', 'asfasfasf', 'RUMAH_TANGGA', '40002296efd706ea221605e0ff8090f2.png');
 
 -- --------------------------------------------------------
 
@@ -146,8 +154,7 @@ CREATE TABLE `pembelian_gas` (
 --
 
 INSERT INTO `pembelian_gas` (`id`, `tanggal`, `id_konsumen`, `id_user`) VALUES
-(1, '2024-06-13 02:01:22', 1, 1),
-(2, '2024-06-13 02:02:02', 1, 1);
+(12, '2024-06-25 17:33:00', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -169,7 +176,8 @@ CREATE TABLE `pengiriman_gas` (
 INSERT INTO `pengiriman_gas` (`id`, `tanggal`, `informasi`, `id_user`) VALUES
 (2, '2024-06-13 01:54:18', 'Fresh', 1),
 (3, '2024-06-13 07:46:00', 'Masi hangat', 1),
-(9, '2024-06-23 14:33:00', NULL, 1);
+(9, '2024-06-23 14:33:00', NULL, 1),
+(10, '2024-06-25 16:35:00', 'baru', 1);
 
 -- --------------------------------------------------------
 
@@ -192,7 +200,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `nama`, `password`, `email`, `token`, `admin`) VALUES
-(1, 'rauufaa', 'Rauuf Anugerah Akbar', '$2b$10$9xE9U4LBSv6Hn523XUrQ6e2IfbUQSCn7dNrUs7NzY/peUVqDYRtX6', 'rauufakbar03@gmail.com', 'a840c378-d809-41ca-bef7-33dde81bb2ec', 'ADMIN');
+(1, 'rauufaa', 'Rauuf Anugerah Akbar', '$2b$10$9xE9U4LBSv6Hn523XUrQ6e2IfbUQSCn7dNrUs7NzY/peUVqDYRtX6', 'rauufakbar03@gmail.com', '6c751959-4661-4d8b-8bba-f1d548d008f7', 'ADMIN');
 
 --
 -- Indexes for dumped tables
@@ -225,7 +233,7 @@ ALTER TABLE `gas`
 --
 ALTER TABLE `konsumen`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `nik` (`nik`) USING BTREE;
+  ADD UNIQUE KEY `nik` (`nik`);
 
 --
 -- Indexes for table `pembelian_gas`
@@ -258,37 +266,37 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `detail_pembelian`
 --
 ALTER TABLE `detail_pembelian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `detail_pengiriman`
 --
 ALTER TABLE `detail_pengiriman`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `gas`
 --
 ALTER TABLE `gas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `konsumen`
 --
 ALTER TABLE `konsumen`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `pembelian_gas`
 --
 ALTER TABLE `pembelian_gas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `pengiriman_gas`
 --
 ALTER TABLE `pengiriman_gas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`
