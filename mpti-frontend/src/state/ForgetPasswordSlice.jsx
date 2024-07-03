@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const axiosInstance = axios.create({
-    baseURL: process.env.VITE_APP_API_URI
+    baseURL: import.meta.env.VITE_APP_API_URI
 })
 
 export const forgetPasswordSendEmail = createAsyncThunk(

@@ -2,8 +2,6 @@ import { databaseQuery } from "../application/database.js"
 import jwt from "jsonwebtoken"
 export const authMiddleware = async (req, res, next) => {
     const token = req.get('Authorization');
-    console.log(req.body, token)
-    // const username = req.body.username;
     if (!token) {
         res.status(401).json({
             errors: "Unauthorized"
