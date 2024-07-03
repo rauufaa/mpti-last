@@ -10,8 +10,7 @@ export async function actionForgetPassword() {
     const user = JSON.parse(localStorage.getItem("user"));
 
     try {
-
-        const response = await axios.get(process.env.VITE_APP_API_URI, {
+        const response = await axios.get(import.meta.env.VITE_APP_API_URI, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": user?.token

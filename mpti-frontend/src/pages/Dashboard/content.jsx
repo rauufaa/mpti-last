@@ -16,7 +16,7 @@ function DashboardContent() {
             token: userState.data.token
         }
         dispatch(gasStok(prepData))
-        axios.get("http://localhost:3000/customer", {
+        axios.get(import.meta.env.VITE_APP_API_URI, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': prepData.token

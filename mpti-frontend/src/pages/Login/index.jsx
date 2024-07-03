@@ -10,10 +10,8 @@ import axios from "axios";
 
 export async function actionLogin() {
     const user = JSON.parse(localStorage.getItem("user"));
-
     try {
-
-        const response = await axios.get(process.env.VITE_APP_API_URI, {
+        const response = await axios.get(import.meta.env.VITE_APP_API_URI, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": user?.token
@@ -29,7 +27,7 @@ export async function actionLogin() {
 function Login() {
     const userState = useSelector(state => state.user);
     const dispatch = useDispatch();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const handleUsernameInputChange = (event) => {
         event.target.value = event.target.value.replace(/[^a-z0-9]/g, '');
@@ -57,6 +55,7 @@ function Login() {
 
         dispatch(loginUser(prepData)).then(result => {
             if (!result.error) {
+                console.log("haiya")
                 navigate("/")
             }
         })
