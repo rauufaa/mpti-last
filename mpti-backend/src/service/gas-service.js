@@ -33,12 +33,6 @@ const transaction = async (user, request) => {
         throw new ResponseError(400, "Konsumen tidak ditemukan");
     }
 
-    if(resultData.at(0).tipe == 'RUMAH_TANGGA'){
-        if(transactionRequest>1){
-            throw new ResponseError(400, "Pembelian tidak valid untuk subsidi Rumah Tangga");
-        }
-    }
-
     query = "SELECT * FROM `detail_pengiriman` WHERE nama_gas = ? ORDER BY id DESC LIMIT 1"
     params = [namaGas];
     const [resultData3, field3] = await databaseQuery(query, params)
@@ -47,12 +41,38 @@ const transaction = async (user, request) => {
         throw new ResponseError(400, "Jumlah pembelian melebihi stok");
     }
 
+    if(resultData.at(0).tipe == 'RUMAH_TANGGA'){
+        if(transactionRequest.countBuy>1){
+            throw new ResponseError(400, "Pembelian tidak valid untuk subsidi Rumah Tangga");
+        }
+        query = "SELECT count(*) AS jumlah FROM pembelian_gas AS a JOIN detail_pembelian AS b ON a.id = b.id_pembelian WHERE a.id_konsumen = ? AND b.id_detail_pengiriman = ?";
+        params = [resultData.at(0).id, resultData3.at(0).id];
+        const [resultData7, field7] = await databaseQuery(query, params);
+
+        if(resultData7.at(0).jumlah == 1){
+            throw new ResponseError(400, "Pelanggan sudah melakukan pembelian maksimal");
+        }
+    }
+
+    if(resultData.at(0).tipe == 'USAHA'){
+        if(transactionRequest.countBuy>5){
+            throw new ResponseError(400, "Pembelian tidak valid untuk subsidi Usaha");
+        }
+        query = "SELECT SUM(b.jumlah) AS jumlah FROM pembelian_gas AS a JOIN detail_pembelian AS b ON a.id = b.id_pembelian WHERE a.id_konsumen = ? AND b.id_detail_pengiriman = ?";
+        params = [resultData.at(0).id, resultData3.at(0).id];
+        const [resultData7, field7] = await databaseQuery(query, params);
+
+        if(resultData7.at(0).jumlah == 5){
+            throw new ResponseError(400, "Pelanggan sudah melakukan pembelian maksimal");
+        }
+    }
+
     query = "SELECT * FROM `gas` WHERE nama = ? ORDER BY id DESC LIMIT 1"
     params = [namaGas];
     const [resultData5, field5] = await databaseQuery(query, params)
 
-    if(resultData3.at(0).sisa<transactionRequest.countBuy){
-        throw new ResponseError(400, "Jumlah pembelian melebihi stok");
+    if(resultData5.length == 0){
+        throw new ResponseError(400, "Harga belum di set");
     }
 
     query = "UPDATE `detail_pengiriman` SET `sisa`=? WHERE `id`=?"

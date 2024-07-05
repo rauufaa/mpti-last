@@ -6,10 +6,8 @@ import { validate_object } from "../validation/validation-util.js"
 import path from "path";
 
 const cekNik = async (request) => {
-    
+    const namaGas = "LPG3KG";
     const customerRequest = validate_object(nikValidation, request)
-
-    
     let query = "SELECT * FROM konsumen WHERE nik=?";
     let params = [customerRequest.nik];
     let [resultUser, field] = await databaseQuery(query, params);
@@ -18,18 +16,45 @@ const cekNik = async (request) => {
         throw new ResponseError(400, "Pelanggan tidak ditemukan")
     }
 
-    
+    query = "SELECT * FROM `gas` WHERE nama = ? ORDER BY id DESC LIMIT 1"
+    params = [namaGas];
+    const [resultData3, field3] = await databaseQuery(query, params)
+
+    if(resultData3.length == 0){
+        throw new ResponseError(400, "Harga belum di set");
+    }
+
+    query = "SELECT * FROM `detail_pengiriman` WHERE nama_gas = ? ORDER BY id DESC LIMIT 1"
+    params = [namaGas];
+    const [resultData2, field2] = await databaseQuery(query, params)
+
+    if(resultData2.at(0).sisa == 0){
+        throw new ResponseError(400, "Stok habis")
+    }
 
     if (resultUser.at(0).tipe == "RUMAH_TANGGA") {
         
-        query = "WITH id_pengiriman_terbaru AS (SELECT id FROM `detail_pengiriman` ORDER BY id DESC LIMIT 1) SELECT * FROM id_pengiriman_terbaru JOIN `detail_pembelian` AS a JOIN `pembelian_gas` AS b ON id_pengiriman_terbaru.id = a.id_detail_pengiriman AND a.id_pembelian = b.id WHERE b.id_user = ? ORDER BY a.id DESC LIMIT 1"
+        query = "SELECT count(*) AS jumlah FROM pembelian_gas AS a JOIN detail_pembelian AS b ON a.id = b.id_pembelian WHERE a.id_konsumen = ? AND b.id_detail_pengiriman = ?"
         
-        params = [resultUser.at(0).id]
+        params = [resultUser.at(0).id, resultData2.at(0).id]
         
         let [resultCount, fieldCekup] = await databaseQuery(query, params);
         
-        if (resultCount.length > 0 && resultCount.at(0).jumlah > 0) {
-            throw new ResponseError(400, "Pelanggan sudah melakukan pembelian")
+        if (resultCount.at(0).jumlah == 1) {
+            throw new ResponseError(400, "Pelanggan sudah melakukan pembelian maksimal")
+        }
+    }
+
+    if (resultUser.at(0).tipe == "USAHA") {
+        
+        query = "SELECT SUM(b.jumlah) AS jumlah FROM pembelian_gas AS a JOIN detail_pembelian AS b ON a.id = b.id_pembelian WHERE a.id_konsumen = ? AND b.id_detail_pengiriman = ?"
+        
+        params = [resultUser.at(0).id, resultData2.at(0).id]
+        
+        let [resultCount, fieldCekup] = await databaseQuery(query, params);
+        
+        if (resultCount.at(0).jumlah == 5) {
+            throw new ResponseError(400, "Pelanggan sudah melakukan pembelian maksimal")
         }
     }
 
@@ -39,8 +64,6 @@ const cekNik = async (request) => {
 const countType = async (request) => {
     let query = "SELECT tipe, COUNT(*) AS jumlah FROM `konsumen` GROUP BY tipe";
     let [result, field] = await databaseQuery(query);
-
-    
 
     return{
         rumahTangga: result.at(0).jumlah,
