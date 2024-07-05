@@ -70,9 +70,7 @@ function TableHistoryStok() {
                     startDate: data.datetime.slice(0, 11) + "00:00",
                     endDate: data.datetime.slice(0, 11) + "23:59"
                 }
-                dispatch(historyStok(dataPrep)).then(result=>
-                    console.log(result)
-                )
+                dispatch(historyStok(dataPrep))
             })
             .catch(error => {
 
@@ -168,7 +166,7 @@ function TableHistoryStok() {
 
                                     {
                                         stokState.historyData.list?.length == 0 ? (
-                                            <tr><td colSpan={6} className="text-center">Tidak Ada Data</td></tr>
+                                            <tr><td colSpan={6} className="text-center">Tidak ada data</td></tr>
                                         ) : (
                                             stokState.historyData.list?.map((data, index) => {
                                                 const dataIndex = (5 * stokState.historyData.currentPage - ((5 - index - 1)))

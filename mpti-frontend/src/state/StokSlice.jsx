@@ -82,7 +82,6 @@ export const historyStok = createAsyncThunk(
                 }
             });
             const result = await response.data;
-            console.log(result)
             return result;
         } catch (error) {
 

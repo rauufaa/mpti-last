@@ -4,6 +4,7 @@ import { Form, Link, useNavigate } from "react-router-dom"
 import { transactionCustomer, updateCountBuyCustomer, updateInputDateCustomer, updateSuccessCustomer } from "../../../state/CustomerSlice";
 import { gasStok } from "../../../state/StokSlice";
 import ModalTransactionCustomer from "./Components/ModalTransactionCustomer";
+import axios from "axios";
 
 function CustomerTransaction() {
     const userState = useSelector(state => state.user);
@@ -13,9 +14,18 @@ function CustomerTransaction() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (customerState.data.nik == null) {
+        if (customerState.data.nik == null || !customerState.success) {
             return navigate("/pelanggan")
         }
+
+        axios.get(import.meta.env.VITE_APP_API_URI, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": userState.data.token
+            }
+        }).catch(error=>{
+            navigate("/login")
+        })
 
         const prepData = {
             token: userState.data.token
@@ -72,7 +82,6 @@ function CustomerTransaction() {
                         <p className="text-[1.2em]">Pembelian Gas LPG 3Kg</p>
                     </div>
                 </div>
-
 
                 <Form className="grid gap-3" onSubmit={handleSubmitTransaction}>
                     <div className="card max-w-5xl bg-base-100 shadow-sm rounded-md overflow-x-auto">

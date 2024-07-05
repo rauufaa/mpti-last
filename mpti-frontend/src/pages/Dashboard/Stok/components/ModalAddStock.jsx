@@ -77,7 +77,7 @@ function ModalAddStock() {
                         </div>
                     ) : (
                         <>
-                            <h3 className="font-bold text-lg mb-4">ReStok</h3>
+                            <h3 className="font-bold text-lg mb-4">Restok</h3>
                             <Form className="grid gap-5" onSubmit={handleSubmitNewStok}>
                                 <div className="grid items-center md:grid-cols-2">
                                     <h2 className="font-medium">Tanggal</h2>
@@ -98,7 +98,7 @@ function ModalAddStock() {
                                     
                                     <button className="btn" type="button" onClick={() => document.getElementById('stok_add_modal').close()}>Batal</button>
                                     
-                                    <button className="btn bg-[#4AAE64] text-white hover:text-black" disabled={stokState.loading}>{stokState.loading ? <span className="loading loading-spinner"></span> : ""}Tambah</button>
+                                    <button className="btn bg-[#4AAE64] text-white hover:text-black" disabled={stokState.loading}>{stokState.loading ? <span className="loading loading-spinner"></span> : ""}Restok</button>
                                 </div>
                             </Form>
                         </>

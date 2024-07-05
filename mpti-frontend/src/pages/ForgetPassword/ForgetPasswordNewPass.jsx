@@ -48,21 +48,24 @@ function ForgetPasswordNewPass() {
     }
     dispatch(forgetPasswordSendNewPass(prepData)).then(result => {
       
-      if (result.payload) {
-        navigate("/login");
-        return
+      if (!result.error) {
+        document.getElementById('forgetPassword_success_modal').showModal()
+        setTimeout(()=>{
+          document.getElementById('forgetPassword_success_modal').close()
+          navigate("/login");
+        }, 5000)
       }
     })
   }
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (forgetPasswordState.error) {
-        dispatch(updateErrorForgotPassword(false))
-      }
-    }, 5000)
-    return () => clearTimeout(timer)
-  }, [forgetPasswordState.error])
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     if (forgetPasswordState.error) {
+  //       dispatch(updateErrorForgotPassword(false))
+  //     }
+  //   }, 5000)
+  //   return () => clearTimeout(timer)
+  // }, [forgetPasswordState.error])
   return (
     <Form onSubmit={handleNewPassSubmit} className="card-body items-center">
       <h2 className="text-[2em] font-semibold text-center text-[#4AAE64]">UBAH KATA SANDI</h2>

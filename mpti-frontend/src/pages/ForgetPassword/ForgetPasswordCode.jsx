@@ -28,14 +28,14 @@ function ForgetPasswordCode() {
 
         dispatch(forgetPasswordSendCode(prepData))
     }
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (forgetPasswordState.error) {
-                dispatch(updateErrorForgotPassword(false))
-            }
-        }, 5000)
-        return () => clearTimeout(timer)
-    }, [forgetPasswordState.error])
+    // useEffect(() => {
+    //     const timer = setTimeout(() => {
+    //         if (forgetPasswordState.error) {
+    //             dispatch(updateErrorForgotPassword(false))
+    //         }
+    //     }, 5000)
+    //     return () => clearTimeout(timer)
+    // }, [forgetPasswordState.error])
     return (
         <Form onSubmit={handleSubmitCode} className="card-body items-center">
             <h2 className="text-[2em] font-semibold text-center text-[#4AAE64]">INPUT KODE</h2>

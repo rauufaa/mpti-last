@@ -1,8 +1,14 @@
-import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 function Profile() {
     const [tab, setTab] = useState(0);
+    const navigate = useNavigate();
+    useEffect(()=>{
+        document.title = "Pangkalan LPG Egi Rahayu - Profil"
+        
+    }, [])
     return (
         <div className="w-full py-2">
             <div className="card bg-base-100  shadow-sm rounded-md">

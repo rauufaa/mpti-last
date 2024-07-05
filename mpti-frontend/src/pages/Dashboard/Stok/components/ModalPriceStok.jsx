@@ -35,19 +35,10 @@ function ModalPriceStok() {
         event.target.value = event.target.value.replace(/^0/g, "")
         event.target.value = event.target.value.replace(/[a-zA-Z]/g, "")
         let value = event.target.value.replace(/\./g, '');
-
         dispatch(updatePriceSellStok(Number(value)))
-        
-        
         value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        
         event.target.value = value;
-
-
-
     }
-
-    
 
     const handleSubmitUpdatePrice = (event) => {
         event.preventDefault();
@@ -102,10 +93,9 @@ function ModalPriceStok() {
                                 </label>
                             </div>
                             <div className="modal-action">
-                                
                                 <button className="btn" type="button" onClick={() => document.getElementById('stok_price_modal').close()}>Batal</button>
                                 
-                                <button className="btn bg-[#4AAE64] text-white hover:text-black">Tambah</button>
+                                <button className="btn bg-[#4AAE64] text-white hover:text-black">Ubah Harga</button>
                             </div>
                         </Form>
                     </>

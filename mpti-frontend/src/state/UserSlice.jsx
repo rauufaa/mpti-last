@@ -69,6 +69,8 @@ const UserSlice = createSlice({
         loading: null,
         error: null,
         message: null,
+        successLogout: null,
+        successLogin: null,
         login: {
             username: null,
             password: null
@@ -88,6 +90,12 @@ const UserSlice = createSlice({
         },
         updateMessageUser: (state, action) => {
             state.message = action.payload
+        },
+        updateSuccessLogoutUser: (state, action) => {
+            state.successLogout = action.payload
+        },
+        updateSuccessLoginUser: (state, action) => {
+            state.successLogin = action.payload
         }
     },
     extraReducers: builder => {
@@ -102,11 +110,13 @@ const UserSlice = createSlice({
                 state.login.username = null;
                 state.login.password = null;
                 state.data = action.payload.data;
+                state.successLogin = true;
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
                 state.message = action.payload;
+                state.successLogin = false;
             })
             .addCase(logoutUser.pending, (state, action) => {
                 state.loading = true;
@@ -115,15 +125,17 @@ const UserSlice = createSlice({
             .addCase(logoutUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = false;
+                state.successLogout = true;
                 state.message = action.payload.data
             })
             .addCase(logoutUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
-                state.message = action.payload
+                state.message = action.payload;
+                state.successLogout = false;
             })
     }
 })
 
-export const { updateUsernameUser, updatePasswordUser, updateErrorUser, updateMessageUser } = UserSlice.actions
+export const { updateSuccessLoginUser, updateSuccessLogoutUser, updateUsernameUser, updatePasswordUser, updateErrorUser, updateMessageUser } = UserSlice.actions
 export default UserSlice.reducer

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, Link } from 'react-router-dom'
+import { Form, Link, useNavigate } from 'react-router-dom'
 import { customerRegister, updateAddressCustomer, updateErrorCustomer, updateKtpCustomer, updateMessageCustomer, updateNameCustomer, updateNikCustomer, updateTypeCustomer } from '../../../state/CustomerSlice';
 import ModalRegisterCustomer from './Components/ModalRegisterCustomer';
+import axios from 'axios';
 
 function CustomerRegister() {
     const customerState = useSelector(state => state.customer);
@@ -10,6 +11,7 @@ function CustomerRegister() {
     const [sourceKtp, setSourceKtp] = useState();
     const [ktpFile, setKtpFile] = useState();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleNikInputChange = (event) => {
         event.target.value = event.target.value.replace(/[^0-9]/g, '');
@@ -74,7 +76,16 @@ function CustomerRegister() {
         return () => clearTimeout(timer)
     }, [customerState.error == true])
 
-
+    useEffect(()=>{
+        axios.get(import.meta.env.VITE_APP_API_URI, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": userState.data.token
+            }
+        }).catch(error=>{
+            navigate("/login")
+        })
+    }, [])
 
     return (
         <>

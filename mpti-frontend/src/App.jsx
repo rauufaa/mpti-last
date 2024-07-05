@@ -25,40 +25,49 @@ const router = createBrowserRouter([
     element: <ForgetPassword/>
   },{
     path: "/",
-    loader: actionDashboard,
     element: <Dashboard />,
     children: [
       {
         path: "/",
+        loader: actionDashboard,
         element: <DashboardContent/>
       },
       {
         path: "pelanggan",
+        loader: actionDashboard,
         element: <Customer />
         
       }, {
         path: "pelanggan/daftar",
+        loader: actionDashboard,
         element: <CustomerRegister/>
       }, {
         path: "pelanggan/transaksi",
+        loader: actionDashboard,
         element: <CustomerTransaction/>
       }, {
         path: "penjualan",
+        loader: actionDashboard,
         element: <Sales/>
       }, {
         path: "stok",
+        loader: actionDashboard,
         element: <Stok/>
       }, {
         path: "stok/harga",
+        loader: actionDashboard,
         element: <StokPrice/>
       }, {
         path: "stok/tambah",
+        loader: actionDashboard,
         element: <StokAdd/>
       }, {
         path: "stok/riwayat",
+        loader: actionDashboard,
         element: <StokHistory/>
       }, {
         path: "/profil",
+        loader: actionDashboard,
         element: <Profile/>
       }
     ]

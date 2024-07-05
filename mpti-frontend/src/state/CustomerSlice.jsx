@@ -162,6 +162,7 @@ const CustomerSlice = createSlice({
             .addCase(customerCheckNik.fulfilled, (state, action) => {
                 state.loading = false
                 state.error = false
+                state.success = true
                 
                 state.data.nik = action.payload.data.nik
                 state.data.name = action.payload.data.nama
@@ -170,6 +171,7 @@ const CustomerSlice = createSlice({
             .addCase(customerCheckNik.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
+                state.success = false;
                 state.message = action.payload
             })
             .addCase(transactionCustomer.pending, (state, action) => {
@@ -179,6 +181,7 @@ const CustomerSlice = createSlice({
             .addCase(transactionCustomer.fulfilled, (state, action) => {
                 state.loading = false
                 state.error = false
+                state.success = true
                 state.message = "Berhasil menambah transaksi"
                 state.transactionDataDone = action.payload.data
                 state.data.nik = null
@@ -189,6 +192,7 @@ const CustomerSlice = createSlice({
             .addCase(transactionCustomer.rejected, (state, action) => {
                 state.loading = false
                 state.error = true
+                state.success = false
                 state.message = action.payload
             })
             .addCase(customerRegister.pending, (state, action) => {
@@ -199,6 +203,7 @@ const CustomerSlice = createSlice({
                 state.loading = false
                 state.error = false
                 state.message = action.payload
+                state.success = true
                 // state.data.nik = null
                 // state.data.name = null
                 // state.data.address = null
@@ -208,6 +213,7 @@ const CustomerSlice = createSlice({
                 state.loading = false
                 state.error = true
                 state.message = action.payload
+                state.success = false
             })
     }
 })

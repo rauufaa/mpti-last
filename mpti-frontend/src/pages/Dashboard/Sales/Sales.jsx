@@ -5,6 +5,7 @@ import FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 
 import { getAllHistorySales, getSales, updateCurrentPageSales, updateEndDateSales, updateStartDateSales } from "../../../state/SalesSlice";
+import axios from "axios";
 
 function Sales() {
     const salesState = useSelector(state => state.sales);
@@ -57,6 +58,8 @@ function Sales() {
     }
 
     useEffect(() => {
+        document.title = "Pangkalan LPG Egi Rahayu - Laporan Penjualan"
+        
         fetch('https://worldtimeapi.org/api/timezone/Asia/Jakarta')
             .then(response => response.json())
             .then(data => {
@@ -213,8 +216,8 @@ function Sales() {
                                 </thead>
                                 <tbody className={salesState?.loading ? "skeleton" : ""}>
                                     {
-                                        salesState.error ? (
-                                            <tr><td colSpan={6} className="text-center">{salesState.message}</td></tr>
+                                        salesState.historyData.list?.length==0 ? (
+                                            <tr><td colSpan={6} className="text-center">Tidak ada data</td></tr>
                                         ) : (
                                             salesState.historyData.list?.map((data, index) => {
                                                 const dataIndex = (5 * salesState.historyData.currentPage - ((5 - index - 1)))
@@ -227,7 +230,6 @@ function Sales() {
                                                         <td>{data.jumlah}</td>
                                                         <td>{data.hargaSatuan}</td>
                                                         <td>{data.totalBayar}</td>
-                                                        
                                                     </tr>
                                                 )
                                             })

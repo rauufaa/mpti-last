@@ -30,14 +30,14 @@ function ForgetPasswordEmail() {
         dispatch(forgetPasswordSendEmail(prepData))
     }
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (forgetPasswordState.error) {
-                dispatch(updateErrorForgotPassword(false))
-            }
-        }, 5000)
-        return () => clearTimeout(timer)
-    }, [forgetPasswordState.error])
+    // useEffect(() => {
+    //     const timer = setTimeout(() => {
+    //         if (forgetPasswordState.error) {
+    //             dispatch(updateErrorForgotPassword(false))
+    //         }
+    //     }, 5000)
+    //     return () => clearTimeout(timer)
+    // }, [forgetPasswordState.error])
 
     return (
         <Form onSubmit={handleEmailSubmit} className="card-body items-center">

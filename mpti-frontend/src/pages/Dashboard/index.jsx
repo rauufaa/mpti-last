@@ -6,7 +6,7 @@ import axios from 'axios';
 import Pertamina from "../../assets/Pertamina.svg"
 import PertaminaPNG from "../../assets/PertaminaPNG.png"
 import DashboardContent from './content';
-import { logoutUser } from '../../state/UserSlice';
+import { logoutUser, updateSuccessLoginUser, updateSuccessLogoutUser } from '../../state/UserSlice';
 import { split } from 'postcss/lib/list';
 
 
@@ -14,7 +14,6 @@ export async function actionDashboard() {
     const user = JSON.parse(localStorage.getItem("user"));
 
     try {
-        
         const response = await axios.get(import.meta.env.VITE_APP_API_URI, {
             headers: {
                 "Content-Type": "application/json",
@@ -35,27 +34,42 @@ function Dashboard() {
     const dispatch = useDispatch();
     const location = useLocation();
     const navigate = useNavigate();
-    useEffect(() => {
-        document.title = "Pangkalan LPG Egi Rahayu - Dashboard"
-    }, [])
-
-
 
     useEffect(() => {
-        
+
         const timer = setTimeout(() => {
             if (stokState.error) {
-                dispatch(updateErrorStok(false))
+                dispatch(updateErrorStok(null))
             }
         }, 5000)
         return () => clearTimeout(timer)
     }, [stokState.error == true])
 
+    useEffect(() => {
+
+        const timer = setTimeout(() => {
+            if (userState.successLogin) {
+                dispatch(updateSuccessLoginUser(null))
+            }
+        }, 5000)
+        return () => clearTimeout(timer)
+    }, [userState.successLogin == false])
+
+    useEffect(() => {
+
+        const timer = setTimeout(() => {
+            if (userState.successLogout) {
+                dispatch(updateSuccessLogoutUser(null))
+            }
+        }, 5000)
+        return () => clearTimeout(timer)
+    }, [userState.successLogout == false])
+
     const logout = (event) => {
         const prepData = {
             token: userState.data.token
         }
-        
+
         dispatch(logoutUser(prepData)).then(result => {
             if (!result.error) {
                 navigate("/login")
@@ -72,7 +86,7 @@ function Dashboard() {
                     <input ref={drawerRef} id="my-drawer-2" type="checkbox" className="drawer-toggle" />
                     <div className="drawer-content flex flex-col items-center">
                         <div className="navbar bg-base-100 max-w-7xl sticky top-0 z-50 shadow-md">
-                            
+
                             <div className="flex-none lg:hidden">
                                 <label htmlFor="my-drawer-2" className="btn btn-square btn-ghost">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-5 h-5 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -196,13 +210,43 @@ function Dashboard() {
                     </div>
                 </div>
             </div >
-            
+
             {
-                stokState.error &&
+                userState.successLogin===true &&
+                <div className="toast toast-end">
+                    <div role="alert" className="alert alert-success">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 shrink-0 stroke-current"
+                            fill="none"
+                            viewBox="0 0 24 24">
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Berhasil Login</span>
+                    </div>
+                </div>
+            }
+
+            {
+                userState.successLogout===false &&
                 <div className="toast toast-end">
                     <div role="alert" className="alert alert-error">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        <span>{stokState.message}</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 shrink-0 stroke-current"
+                            fill="none"
+                            viewBox="0 0 24 24">
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Gagal Logout</span>
                     </div>
                 </div>
             }

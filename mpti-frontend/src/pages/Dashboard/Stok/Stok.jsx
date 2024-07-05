@@ -1,16 +1,18 @@
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Form, Link, useLocation } from "react-router-dom"
+import { Form, Link, useLocation, useNavigate } from "react-router-dom"
 import { gasStok, updateInputDateStok, updateSuccessStok } from "../../../state/StokSlice";
 import ModalAddStock from "./components/ModalAddStock";
 import TableStokHistory from "./components/TableHistoryStok";
 import ModalPriceStok from "./components/ModalPriceStok";
 import ModalReturStok from "./components/ModalReturStok";
+import axios from "axios";
 
 function Stok() {
     const stokState = useSelector(state => state.stok)
     const userState = useSelector(state => state.user)
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const prepData = {
@@ -20,6 +22,8 @@ function Stok() {
     }, [])
 
     useEffect(() => {
+        document.title = "Pangkalan LPG Egi Rahayu - Atur Stok"
+
         fetch('https://worldtimeapi.org/api/timezone/Asia/Jakarta')
             .then(response => response.json())
             .then(data => {
