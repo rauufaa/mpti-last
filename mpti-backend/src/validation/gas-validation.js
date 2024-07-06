@@ -6,11 +6,13 @@ const joi_format = Joi.extend(JoiDate)
 const addGasValidation = Joi.object({
     inputDate: joi_format.date().format('YYYY-MM-DDTHH:mm').required().messages({
         "any.required":"Tanggal input tidak boleh kosong",
-        "date.format": "Format input tanggal tidak sesuai"
+        "any.format": "Format input tanggal tidak sesuai"
     }),
     countStok: Joi.number().positive().required().messages({
         "number.positive": "Format stok tidak menerima nilai negative atau kosong",
-        "any.required":"Tanggal input tidak boleh kosong",
+        "number.base": "Format stok tidak menerima nilai negative atau kosong",
+        "number.empty": "Format stok tidak menerima nilai negative atau kosong",
+        "any.required":"Format stok input tidak boleh kosong",
     }),
     information: Joi.string().allow(null, '').max(100).optional(),
 })
@@ -18,15 +20,19 @@ const addGasValidation = Joi.object({
 const updatePriceGasValidation = Joi.object({
     inputDate: joi_format.date().format('YYYY-MM-DDTHH:mm').required().messages({
         "any.required":"Tanggal input tidak boleh kosong",
-        "date.format": "Format input tanggal tidak sesuai"
+        "any.format": "Format input tanggal tidak sesuai"
     }),
     priceBuy: Joi.number().positive().required().messages({
         "number.positive": "Format harga beli tidak menerima nilai negative atau kosong",
-        "any.required":"Tanggal input tidak boleh kosong",
+        "number.base": "Harga beli wajib terisi angka positif",
+        "number.empty": "Harga beli wajib terisi angka positif",
+        "any.required":"Harga beli tidak boleh kosong",
     }),
     priceSell: Joi.number().positive().required().messages({
         "number.positive": "Format harga jual tidak menerima nilai negative atau kosong",
-        "any.required":"Input  tidak boleh kosong",
+        "number.base": "Harga jual wajib terisi angka positif",
+        "number.empty": "Harga jual wajib terisi angka positif",
+        "any.required":"Harga jual tidak boleh kosong",
     }),
 })
 
@@ -38,10 +44,10 @@ const searchGasStokHistoryValidation = Joi.object({
         "number.positive": "Format size tidak menerima nilai negative atau kosong",
     }),
     startDate: joi_format.date().format('YYYY-MM-DDTHH:mm').optional().messages({
-        "date.format": "Format startDate tidak sesuai"
+        "any.format": "Format startDate tidak sesuai"
     }),
     endDate: joi_format.date().format('YYYY-MM-DDTHH:mm').optional().messages({
-        "date.format": "Format endDate tidak sesuai"
+        "any.format": "Format endDate tidak sesuai"
     }),
 })
 
@@ -53,19 +59,19 @@ const searchGasSalesHistoryValidation = Joi.object({
         "number.positive": "Format size tidak menerima nilai negative atau kosong",
     }),
     startDate: joi_format.date().format('YYYY-MM-DDTHH:mm').optional().messages({
-        "date.format": "Format startDate tidak sesuai"
+        "any.format": "Format startDate tidak sesuai"
     }),
     endDate: joi_format.date().format('YYYY-MM-DDTHH:mm').optional().messages({
-        "date.format": "Format endDate tidak sesuai"
+        "any.format": "Format endDate tidak sesuai"
     }),
 })
 
 const downloadGasStokHistoryValidation = Joi.object({
     startDate: joi_format.date().format('YYYY-MM-DDTHH:mm').optional().messages({
-        "date.format": "Format startDate tidak sesuai"
+        "any.format": "Format startDate tidak sesuai"
     }),
     endDate: joi_format.date().format('YYYY-MM-DDTHH:mm').optional().messages({
-        "date.format": "Format endDate tidak sesuai"
+        "any.format": "Format endDate tidak sesuai"
     }),
 })
 
@@ -82,6 +88,8 @@ const deleteGasStokValidation = Joi.number().positive().required()
 
 const returGasStokValidation = Joi.object({
     nik:Joi.string().max(16).min(16).pattern(new RegExp("^[0-9]")).required().messages({
+        "string.base": "NIK wajib diisi",
+        "string.empty": "NIK wajib diisi",
         "string.min": "NIK minimal 16 karakter",
         "string.max": "NIK maksimal 16 karakter",
         "string.pattern.base": "Format NIK wajib berisi angka",
@@ -96,19 +104,25 @@ const returGasStokValidation = Joi.object({
 })
 
 const newTransactionGasValidation = Joi.object({
-    nik: Joi.string().max(16).min(16).pattern(new RegExp("^[0-9]")).messages({
+    nik: Joi.string().max(16).min(16).pattern(new RegExp("^[0-9]")).required().messages({
+        "string.base": "NIK wajib diisi",
+        "string.empty": "NIK wajib diisi",
         "string.min": "NIK minimal 16 karakter",
         "string.max": "NIK maksimal 16 karakter",
         "string.pattern.base": "Format NIK wajib berisi angka",
         "any.required": "NIK wajib diisi"
     }),
     inputDate: joi_format.date().format('YYYY-MM-DDTHH:mm').required().messages({
-        "number.positive": "Format retur tabung baru tidak menerima nilai negative atau kosong",
+        "any.base": "Tanggal tidak boleh kosong",
+        "any.empty": "Tanggal tidak boleh kosong",
+        "any.required": "Tanggal tidak boleh kosong",
     }),
-    countBuy: Joi.number().positive().min(1).max(3).required().messages({
+    countBuy: Joi.number().positive().min(1).max(5).required().messages({
+        "number.base": "Jumlah beli wajib diisi",
+        "number.empty": "Jumlah beli wajib diisi",
         "number.positive": "Format retur uang tidak menerima nilai negative atau kosong",
         "number.min": "Pembelian minimal 1",
-        "number.max": "Pembelian maksimal 3",
+        "number.max": "Pembelian maksimal 5",
     }),
 })
 

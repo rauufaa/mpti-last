@@ -42,7 +42,7 @@ const login = async (request) => {
     let [resultUser, field] = await databaseQuery(query, params)
     
     if(resultUser.length == 0){
-        throw new ResponseError(400, "User not found")
+        throw new ResponseError(400, "User tidak ditemukan")
     }
     const nama = resultUser.at(0).nama
     const username = resultUser.at(0).username
@@ -52,7 +52,7 @@ const login = async (request) => {
     const isPasswordValid = await bcrypt.compare(loginRequest.password, resultUser.at(0).password);
     
     if (!isPasswordValid) {
-        throw new ResponseError(401, "Username or password wrong");
+        throw new ResponseError(401, "Username atau kata sandi salah");
     }
 
     const token = uuid().toString()
@@ -82,7 +82,7 @@ const logout = async (request) => {
     let [resultUser, field] = await databaseQuery(query, params);
 
     if(resultUser.length == 0){
-        throw new ResponseError(400, "User not found")
+        throw new ResponseError(400, "User tidak ditemukan")
     }
 
     query = "UPDATE users SET token=NULL WHERE username=?";
