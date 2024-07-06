@@ -72,8 +72,8 @@ const UserSlice = createSlice({
         successLogout: null,
         successLogin: null,
         login: {
-            username: null,
-            password: null
+            username: "",
+            password: ""
         },
 
         data: JSON.parse(localStorage.getItem("user")) || null

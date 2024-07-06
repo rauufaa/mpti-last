@@ -45,7 +45,7 @@ function Login() {
         if (userState.login.username === "" || userState.login.password === "") {
             dispatch(updateErrorUser(true));
             dispatch(updateMessageUser("Isian tidak boleh kosong"));
-            return
+            return false;
         }
 
         const prepData = {
